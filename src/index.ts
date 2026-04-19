@@ -1,14 +1,25 @@
 import { Runner } from "./runner/runner";
+import { randomContinue } from "./runner/strategy";
 
 async function main() {
-  const input = "hi how are you";
-  const stream = await Runner.run(input);
+  const stream = Runner.start("hi how are you", { shouldContinue: randomContinue });
 
-  for await (const event of stream) {
-    console.log(`[${event.prompt}] continue? ${event.shouldContinue}`);
-    if (event.done) console.log(`[${event.prompt}] done`);
+  for await (const chunk of stream) {
+    switch (chunk.type) {
+      case "token":
+        console.log(`token: ${chunk.data}`);
+        break;
+      case "event":
+        console.log(`event:${chunk.name}`, chunk.payload);
+        break;
+      case "error":
+        console.error("error:", chunk.error);
+        break;
+      case "done":
+        console.log("done:", chunk.result);
+        break;
+    }
   }
-
 }
 
 main();
