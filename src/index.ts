@@ -1,22 +1,33 @@
+import { AgentBuilder, OpenAIProvider } from "./agent";
 import { Runner } from "./runner/runner";
-import { randomContinue } from "./runner/strategy";
+import { neverContinue } from "./runner/strategy";
 
 async function main() {
-  const stream = Runner.start("hi how are you", { shouldContinue: randomContinue });
+  const agent = AgentBuilder.create("assistant")
+    .provider(new OpenAIProvider({ apiKey: process.env.OPENAI_API_KEY }))
+    .model("gpt-4o-mini")
+    .instructions("You are a concise helpful assistant.")
+    .temperature(0.2)
+    .build();
+
+  const stream = Runner.start("hi how are you", {
+    agent,
+    shouldContinue: neverContinue,
+  });
 
   for await (const chunk of stream) {
     switch (chunk.type) {
       case "token":
-        console.log(`token: ${chunk.data}`);
+        process.stdout.write(chunk.data);
         break;
       case "event":
-        console.log(`event:${chunk.name}`, chunk.payload);
+        console.log(`\n[event:${chunk.name}]`, chunk.payload);
         break;
       case "error":
-        console.error("error:", chunk.error);
+        console.error("\nerror:", chunk.error);
         break;
       case "done":
-        console.log("done:", chunk.result);
+        console.log("\ndone:", chunk.result);
         break;
     }
   }
