@@ -1,4 +1,4 @@
-import { Runner } from "./runner";
+import { Runner } from "./runner/runner";
 
 async function main() {
   const input = "hi how are you";

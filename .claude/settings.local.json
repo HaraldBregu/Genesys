@@ -5,7 +5,9 @@
       "Bash(npm run *)",
       "Bash(npm start *)",
       "Bash(chmod +x *)",
-      "Bash(bash *)"
+      "Bash(bash *)",
+      "Bash(git push *)",
+      "Bash(git mv *)"
     ]
   }
 }
