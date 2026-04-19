@@ -110,7 +110,7 @@ function toOpenAITool(t: Tool): ChatCompletionTool {
     function: {
       name: t.name,
       description: t.description,
-      parameters: t.parameters as Record<string, unknown>,
+      parameters: t.parameters as unknown as Record<string, unknown>,
     },
   };
 }
