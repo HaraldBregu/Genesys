@@ -8,6 +8,7 @@ async function main() {
     console.log(`[${event.prompt}] continue? ${event.shouldContinue}`);
     if (event.done) console.log(`[${event.prompt}] done`);
   }
+
 }
 
 main();
